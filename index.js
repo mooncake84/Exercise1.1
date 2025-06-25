@@ -63,7 +63,7 @@ app.post("/savedata", async (req, res) => {
 
 app.get("/getdata", async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM data ORDER BY id");
+    const result = await pool.query("SELECT * FROM data ORDER BY id DESC");
 
     return res.status(200).json({
       message: "✅ Datos obtenidos exitosamente",
