@@ -17,12 +17,14 @@ app.post("/create-table", async (req, res) => {
 
     if (!checkTable.rows[0].exists) {
       await pool.query(`
-        CREATE TABLE ${tableName} (
-          id SERIAL PRIMARY KEY,
-          value TEXT,
-          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        );
-      `);
+  CREATE TABLE ${tableName} (
+    id SERIAL PRIMARY KEY,
+    value TEXT,
+    nombre VARCHAR(100),
+    matricula VARCHAR(20),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  );
+`);
 
       return res.status(201).json({ message: "✅ Tabla creada exitosamente" });
     } else {
@@ -35,16 +37,18 @@ app.post("/create-table", async (req, res) => {
 });
 
 app.post("/savedata", async (req, res) => {
-  const { value } = req.body;
+  const { value, nombre, matricula } = req.body;
 
-  if (!value) {
-    return res.status(400).json({ error: "El campo 'value' es requerido" });
+  if (!value || !nombre || !matricula) {
+    return res.status(400).json({
+      error: "Los campos 'value', 'nombre' y 'matricula' son requeridos",
+    });
   }
 
   try {
     const result = await pool.query(
-      `INSERT INTO data (value) VALUES ($1) RETURNING *;`,
-      [value]
+      `INSERT INTO data (value, nombre, matricula) VALUES ($1, $2, $3) RETURNING *;`,
+      [value, nombre, matricula]
     );
 
     return res.status(201).json({
