@@ -21,7 +21,7 @@ app.post("/create-table", async (req, res) => {
     id SERIAL PRIMARY KEY,
     value TEXT,
     nombre VARCHAR(100),
-    matricula VARCHAR(20),
+    matricula INT(20),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
   );
 `);
