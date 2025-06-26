@@ -11,11 +11,15 @@ app.post("/create-table", async (req, res) => {
   try {
     const tableName = "data";
 
-    const checkTable = await pool.query("SELECT to_regclass($1) AS exists", [
-      tableName,
-    ]);
+    // Verificar si la tabla ya existe
+    const checkTable = await pool.query(
+      "SELECT EXISTS (SELECT FROM pg_tables WHERE schemaname = 'public' AND tablename = $1)",
+      [tableName]
+    );
 
-    if (!checkTable.rows[0].exists) {
+    const tableExists = checkTable.rows[0].exists;
+
+    if (!tableExists) {
       await pool.query(`
         CREATE TABLE ${tableName} (
           id SERIAL PRIMARY KEY,
@@ -31,8 +35,11 @@ app.post("/create-table", async (req, res) => {
       return res.status(200).json({ message: "ℹ La tabla ya existe" });
     }
   } catch (error) {
-    console.error("❌ Error:", error.message);
-    res.status(500).json({ error: "Error al procesar la solicitud" });
+    console.error("❌ Error detallado:", error);
+    res.status(500).json({
+      error: "Error al procesar la solicitud",
+      detalle: error.message, // Envía el mensaje de error específico
+    });
   }
 });
 
