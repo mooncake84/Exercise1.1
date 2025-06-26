@@ -17,14 +17,14 @@ app.post("/create-table", async (req, res) => {
 
     if (!checkTable.rows[0].exists) {
       await pool.query(`
-  CREATE TABLE ${tableName} (
-    id SERIAL PRIMARY KEY,
-    value TEXT,
-    nombre VARCHAR(100),
-    matricula INT(20),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-  );
-`);
+        CREATE TABLE ${tableName} (
+          id SERIAL PRIMARY KEY,
+          value TEXT,
+          nombre VARCHAR(100),
+          matricula INTEGER,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+      `);
 
       return res.status(201).json({ message: "✅ Tabla creada exitosamente" });
     } else {
@@ -106,5 +106,5 @@ app.get("/temperatura", (req, res) => {
 const PORT = process.env.PORT || 3002;
 
 app.listen(PORT, () => {
-  console.log(`Servidor corriendo en puerto.: ${PORT}`);
+  console.log(`Servidor corriendo en puerto: ${PORT}`);
 });
