@@ -1,3 +1,23 @@
+import pool from "./db.js";
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en puerto en http://localhost:${PORT}`);
+});
+
+process.on("unhandledRejection", (error) => {
+  console.error("❌ Unhandled Rejection:", error.message);
+});
+
+dotenv.config();
+app.use(cors());
+app.use(express.json());
+
 app.post("/create-device-tables", async (req, res) => {
   try {
     // --- device_logs ---
@@ -103,3 +123,40 @@ app.post("/save-data", async (req, res) => {
     return res.status(500).json({ error: "Error al guardar los datos" });
   }
 });
+
+app.post("/drop-data-table", async (req, res) => {
+  try {
+    const tableName = "data";
+
+    await pool.query(`DROP TABLE IF EXISTS ${tableName}`);
+
+    return res.status(200).json({ message: "✅ Tabla eliminada exitosamente" });
+  } catch (err) {
+    //console.error("❌ Error:", error.message);
+    return res.status(500).json({ error: "Error al eliminar la tabla" });
+  }
+});
+
+app.get("/get-data", async (req, res) => {
+  try {
+    const tableName = "data";
+    const result = await pool.query(`SELECT * FROM  ${tableName}`);
+
+    //  console.log(result.rows());
+    return res.json(result.rows);
+  } catch (err) {
+    return res.status(500).json({ error: "Imposible Regresar los datos" });
+  }
+});
+
+/*
+app.get("/temperatura"),
+  async (req, res) => {
+    try {
+      res.json({ valor: "10 °C", timestamp: new Date().toISOString() });
+    } catch (error) {
+      console.error("❌ Error:", error.message);
+      return res.status(500).json({ error: "Error al obtener temperatura" });
+    }
+  };
+*/
