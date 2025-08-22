@@ -1,28 +1,14 @@
 {
-  "name": "exercise1.1",
-  "version": "1.0.0",
-  "main": "index.js",
+  "name": "exercise1-1",
+  "private": true,
+  "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "cors": "^2.8.5",
-    "dotenv": "^17.2.1",
-    "express": "^5.1.0",
-    "pg": "^8.16.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/mooncake84/Exercise1.1.git"
-  },
-  "bugs": {
-    "url": "https://github.com/mooncake84/Exercise1.1/issues"
-  },
-  "homepage": "https://github.com/mooncake84/Exercise1.1#readme",
-  "description": ""
+  "devDependencies": {
+    "vite": "^7.1.2"
+  }
 }
